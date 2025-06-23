@@ -11,14 +11,18 @@ def emotion_detector(text_to_analyze):
     emotions = formatted_response['emotionPredictions'][0]['emotion']
 
     output = "{\n"
+    dictionary = {}
 
     for key, value in emotions.items():
         output += f"'{key}': {value},\n"
+        dictionary.update({key: value})
 
     #anger = formatted_response['emotionPredictions'][0]['emotion']['anger']
 
     dominant_emotion = max(emotions, key=emotions.get)
+    dictionary["dominant_emotion"] = dominant_emotion
     output += "'dominant_emotion': '" + dominant_emotion + "'"
     output += "\n}"
 
-    return print(output)
+    #print(output)
+    return print(dictionary)
