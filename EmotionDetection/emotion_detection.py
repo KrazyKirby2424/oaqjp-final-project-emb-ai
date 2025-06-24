@@ -8,21 +8,29 @@ def emotion_detector(text_to_analyze):
     response = requests.post(url, json = myobj, headers=header)
 
     formatted_response = json.loads(response.text)
-    emotions = formatted_response['emotionPredictions'][0]['emotion']
-
-    #output = "{\n"
     dictionary = {}
+    #print("status code")
+    #print(response.status_code)
 
-    for key, value in emotions.items():
-        #output += f"'{key}': {value},\n"
-        dictionary.update({key: value})
+    if response.status_code == 200:
+        emotions = formatted_response['emotionPredictions'][0]['emotion']
+        #output = "{\n"        
 
-    #anger = formatted_response['emotionPredictions'][0]['emotion']['anger']
+        for key, value in emotions.items():
+            #output += f"'{key}': {value},\n"
+            dictionary.update({key: value})
 
-    dominant_emotion = max(emotions, key=emotions.get)
-    dictionary["dominant_emotion"] = dominant_emotion
-    #output += "'dominant_emotion': '" + dominant_emotion + "'"
-    #output += "\n}"
+        #anger = formatted_response['emotionPredictions'][0]['emotion']['anger']
+        dominant_emotion = max(emotions, key=emotions.get)
+        dictionary["dominant_emotion"] = dominant_emotion
+        #output += "'dominant_emotion': '" + dominant_emotion + "'"
+        #output += "\n}"
 
+    elif response.status_code == 400:
+        #print("It is none")
+        #dictionary = None
+        #print(dictionary)
+        ##return None
+        dictionary = {'anger': None, 'disgust': None, 'fear': None, 'joy': None, 'sadness': None, 'dominant_emotion': None}
     #print(output)
     return dictionary
